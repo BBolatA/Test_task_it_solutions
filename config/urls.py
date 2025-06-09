@@ -25,9 +25,7 @@ schema_view = get_schema_view(
     openapi.Info(
         title="CashFlow API",
         default_version="v1",
-        description="Документация REST-API для приложения CashFlow",
-        contact=openapi.Contact(email="admin@yourdomain.com"),
-        license=openapi.License(name="BSD License"),
+        description="Документация ДДС",
     ),
     public=True,
     permission_classes=[permissions.AllowAny],
