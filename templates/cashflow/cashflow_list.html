@@ -1,0 +1,290 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Записи ДДС{% endblock %}
+
+
+{% block content %}
+<div class="page-wrapper">
+
+  <!-- Фильтры -->
+  <div class="filters-container">
+    <div class="card shadow-sm">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h6 class="mb-0">Фильтры</h6>
+        <button class="btn btn-outline-light btn-sm"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#filterBody"
+                aria-expanded="true"
+                aria-controls="filterBody">
+          <i class="material-icons" style="font-size:1rem;">filter_list</i>
+        </button>
+      </div>
+      <div class="collapse show" id="filterBody">
+        <div class="card-body">
+          <form class="row gx-3 gy-2">
+
+            <div class="col-md-2 col-12 form-group">
+              <label for="date_from" class="form-label">Дата от</label>
+              <input type="text"
+                     id="date_from"
+                     class="form-control form-control-sm"
+                     placeholder="YYYY-MM-DD">
+            </div>
+
+            <div class="col-md-2 col-12 form-group">
+              <label for="date_to" class="form-label">Дата до</label>
+              <input type="text"
+                     id="date_to"
+                     class="form-control form-control-sm"
+                     placeholder="YYYY-MM-DD">
+            </div>
+
+            <div class="col-md-2 col-12 form-group">
+              <label for="status_filter" class="form-label">Статус</label>
+              <select id="status_filter"
+                      class="form-select form-select-sm">
+                <option value="">—</option>
+              </select>
+            </div>
+
+            <div class="col-md-2 col-12 form-group">
+              <label for="kind_filter" class="form-label">Тип</label>
+              <select id="kind_filter"
+                      class="form-select form-select-sm">
+                <option value="">—</option>
+              </select>
+            </div>
+
+            <div class="col-md-2 col-12 form-group">
+              <label for="category_filter" class="form-label">Категория</label>
+              <select id="category_filter"
+                      class="form-select form-select-sm">
+                <option value="">—</option>
+              </select>
+            </div>
+
+            <div class="col-md-2 col-12 form-group">
+              <label for="subcategory_filter" class="form-label">Подкатегория</label>
+              <select id="subcategory_filter"
+                      class="form-select form-select-sm">
+                <option value="">—</option>
+              </select>
+            </div>
+
+            <div class="col-12 d-flex filters-actions">
+              <button type="button"
+                      id="apply_filters"
+                      class="btn btn-success btn-sm">
+                Применить
+              </button>
+              <button type="button"
+                      id="reset_filters"
+                      class="btn btn-outline-light btn-sm">
+                Сбросить
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Таблица и пагинация -->
+  <div class="table-container">
+    <div class="card shadow-sm cashflow-card">
+      <div class="card-body d-flex flex-column">
+        <div class="cashflow-table-container">
+          <div class="table-responsive">
+            <table id="cashflow_table" class="table align-items-center mb-0">
+              <thead>
+                <tr>
+                  <th class="text-uppercase text-secondary text-xs font-weight-bolder">Дата</th>
+                  <th class="text-uppercase text-secondary text-xs font-weight-bolder text-end">Сумма, ₽</th>
+                  <th class="text-uppercase text-secondary text-xs font-weight-bolder">Статус</th>
+                  <th class="text-uppercase text-secondary text-xs font-weight-bolder">Тип</th>
+                  <th class="text-uppercase text-secondary text-xs font-weight-bolder">Категория</th>
+                  <th class="text-uppercase text-secondary text-xs font-weight-bolder">Подкатегория</th>
+                  <th class="text-uppercase text-secondary text-xs font-weight-bolder">Комментарий</th>
+                  <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center">Действия</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div id="pagination_container"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- МОДАЛКА -->
+<div class="modal fade" id="cashflowModal" tabindex="-1" aria-labelledby="cashflowModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content border-0 shadow-lg">
+      <form id="cashflowForm" class="needs-validation" novalidate>
+        <div class="modal-header bg-gradient-primary py-3">
+          <h5 class="modal-title text-white d-flex align-items-center" id="cashflowModalLabel">
+            <i class="material-icons">edit</i>
+            <span class="ms-1">Редактировать запись ДДС</span>
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <input type="hidden" id="modal_id">
+
+          <div class="row gx-4 gy-3">
+            <!-- Дата -->
+            <div class="col-md-6">
+              <label for="modal_date" class="form-label font-weight-bold">
+                <i class="material-icons">calendar_today</i> Дата
+              </label>
+              <input
+                type="date"
+                id="modal_date"
+                name="date"
+                class="form-control"
+                required>
+              <div class="invalid-feedback">
+                Пожалуйста, укажите дату
+              </div>
+            </div>
+
+            <!-- Сумма -->
+            <div class="col-md-6">
+              <label for="modal_amount" class="form-label font-weight-bold">
+                <i class="material-icons">currency_ruble</i>Сумма, ₽
+              </label>
+              <input type="number"
+                     id="modal_amount"
+                     name="amount"
+                     class="form-control"
+                     placeholder="0.00"
+                     required
+                     min="0.01"
+                     step="0.01">
+              <div class="invalid-feedback">
+                Убедитесь, что это значение больше либо равно 0.
+              </div>
+            </div>
+
+            <!-- Статус -->
+            <div class="col-md-6">
+              <label for="modal_status" class="form-label font-weight-bold">
+                <i class="material-icons">flag</i>Статус
+              </label>
+              <select id="modal_status"
+                      name="status"
+                      class="form-select"
+                      required>
+                <option value="" selected disabled>Выберите...</option>
+                <!-- <option value="1">В работе</option> и т.п. -->
+              </select>
+              <div class="invalid-feedback">
+                Пожалуйста, выберите статус
+              </div>
+            </div>
+
+            <!-- Тип -->
+            <div class="col-md-6">
+              <label for="modal_type" class="form-label font-weight-bold">
+                <i class="material-icons">category</i>Тип
+              </label>
+              <select id="modal_type"
+                      name="type"
+                      class="form-select"
+                      required>
+                <option value="" selected disabled>Выберите...</option>
+              </select>
+              <div class="invalid-feedback">
+                Пожалуйста, выберите тип
+              </div>
+            </div>
+
+            <!-- Категория -->
+            <div class="col-md-6">
+              <label for="modal_category" class="form-label font-weight-bold">
+                <i class="material-icons align-middle">format_list_bulleted</i>Категория
+              </label>
+              <select id="modal_category"
+                      name="category"
+                      class="form-select"
+                      required>
+                <option value="" selected disabled>Выберите...</option>
+              </select>
+              <div class="invalid-feedback">
+                Пожалуйста, выберите категорию
+              </div>
+            </div>
+
+            <!-- Подкатегория -->
+            <div class="col-md-6">
+              <label for="modal_subcategory" class="form-label font-weight-bold">
+                <i class="material-icons">subdirectory_arrow_right</i>Подкатегория
+              </label>
+              <select id="modal_subcategory"
+                      name="subcategory"
+                      class="form-select"
+                      required>
+                <option value="" selected disabled>Выберите...</option>
+              </select>
+              <div class="invalid-feedback">
+                Пожалуйста, выберите подкатегорию
+              </div>
+            </div>
+
+            <!-- Комментарий -->
+            <div class="col-12">
+              <label for="modal_comment" class="form-label font-weight-bold">
+                <i class="material-icons align-middle">comment</i>Комментарий
+              </label>
+              <textarea id="modal_comment"
+                        name="comment"
+                        class="form-control"
+                        rows="3"
+                        placeholder="Ваш комментарий..."></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit"
+                  class="btn bg-gradient-primary d-flex align-items-center justify-content-center"
+                  style="min-width:120px;">
+            Сохранить
+          </button>
+          <button type="button"
+                  class="btn bg-gradient-secondary text-white d-flex align-items-center justify-content-center ms-2"
+                  style="min-width:120px;"
+                  data-bs-dismiss="modal">
+            Отмена
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="{% static 'js/filter.js' %}"></script>
+<script>
+  (function () {
+    'use strict';
+    const form = document.getElementById('cashflowForm');
+    form.addEventListener('submit', function (e) {
+      if (!form.checkValidity()) {
+        e.preventDefault();
+        e.stopPropagation();
+      } else {
+
+      }
+      form.classList.add('was-validated');
+    });
+  })();
+</script>
+{% endblock %}

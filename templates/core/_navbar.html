@@ -1,0 +1,12 @@
+{% load static %}
+
+<div class="container-fluid px-4 py-2">
+  <ol class="breadcrumb mb-0 bg-transparent">
+    <li class="breadcrumb-item text-sm">
+      <a class="opacity-75 text-dark" href="{% url 'cashflow-list' %}">Главная</a>
+    </li>
+    <li class="breadcrumb-item text-sm text-dark active" aria-current="page">
+      {% if page_title %}{{ page_title }}{% else %}Новая запись{% endif %}
+    </li>
+  </ol>
+</div>

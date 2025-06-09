@@ -1,0 +1,49 @@
+{% load static %}
+<aside
+  class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl bg-white fixed-start shadow-sm"
+  id="sidenav-main"
+>
+  <div class="sidenav-header px-3 pt-3">
+    <a class="navbar-brand fs-5 fw-bold text-dark" href="{% url 'cashflow-list' %}">
+      Test Task
+    </a>
+  </div>
+
+  <hr class="horizontal dark my-2">
+
+  <div class="collapse navbar-collapse w-auto" id="sidenav-collapse">
+    <ul class="navbar-nav">
+
+      <li class="nav-item">
+        <a
+          class="nav-link d-flex align-items-center px-3 py-2 {% if request.resolver_match.url_name == 'cashflow-list' %}active bg-gradient-primary text-white{% else %}text-dark{% endif %}"
+          href="{% url 'cashflow-list' %}"
+        >
+          <i class="material-icons me-2">dashboard</i>
+          <span class="nav-link-text">Обзор ДДС</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          class="nav-link d-flex align-items-center px-3 py-2 {% if request.resolver_match.url_name == 'cashflow-new' %}active bg-gradient-primary text-white{% else %}text-dark{% endif %}"
+          href="{% url 'cashflow-new' %}"
+        >
+          <i class="material-icons me-2">add</i>
+          <span class="nav-link-text">Новая запись</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          class="nav-link d-flex align-items-center px-3 py-2 {% if request.resolver_match.url_name == 'catalog-management' %}active bg-gradient-primary text-white{% else %}text-dark{% endif %}"
+          href="{% url 'catalog-management' %}"
+        >
+          <i class="material-icons me-2">settings</i>
+          <span class="nav-link-text">Справочники</span>
+        </a>
+      </li>
+
+    </ul>
+  </div>
+</aside>

@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  {% if object %}Редактировать запись{% else %}Новая запись{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-sm">
+      <div class="card-header bg-gradient-primary py-3">
+        <h6 class="text-white mb-0">
+          {% if object %}Редактирование{% else %}Новая запись{% endif %}
+        </h6>
+      </div>
+      <div class="card-body px-4 py-3">
+        <form id="cashflow_form" novalidate>
+          <div class="row g-4">
+
+            <!-- Дата -->
+            <div class="col-md-6">
+              <label for="date" class="form-label font-weight-bold">
+                <i class="material-icons align-middle">event</i> Дата
+              </label>
+              <div class="input-group input-group-static">
+                <span class="input-group-text"></span>
+                <input
+                  type="date"
+                  id="date"
+                  name="date"
+                  class="form-control"
+                  required
+                >
+                <div class="invalid-feedback">
+                  Пожалуйста, укажите дату
+                </div>
+              </div>
+            </div>
+
+            <!-- Сумма -->
+            <div class="col-md-6">
+              <label for="amount" class="form-label font-weight-bold">
+                Сумма, ₽
+              </label>
+              <div class="input-group input-group-static">
+                <span class="input-group-text"></span>
+                <input
+                  type="number"
+                  id="amount"
+                  name="amount"
+                  class="form-control"
+                  step="1"
+                  placeholder="0"
+                  required
+                  min="0.01"
+                >
+                <div class="invalid-feedback">
+                  Убедитесь, что сумма больше 0
+                </div>
+              </div>
+            </div>
+
+            <!-- Статус -->
+            <div class="col-md-6">
+              <label for="status" class="form-label font-weight-bold">
+                <i class="material-icons align-middle">flag</i> Статус
+              </label>
+              <div class="input-group input-group-static">
+                <span class="input-group-text"></span>
+                <select id="status" name="status" class="form-select" required>
+                  <option value="">—</option>
+                </select>
+                <div class="invalid-feedback">
+                  Пожалуйста, выберите статус
+                </div>
+              </div>
+            </div>
+
+            <!-- Тип -->
+            <div class="col-md-6">
+              <label for="type" class="form-label font-weight-bold">
+                <i class="material-icons align-middle">category</i> Тип
+              </label>
+              <div class="input-group input-group-static">
+                <span class="input-group-text"></span>
+                <select id="type" name="type" class="form-select" required>
+                  <option value="">—</option>
+                </select>
+                <div class="invalid-feedback">
+                  Пожалуйста, выберите тип
+                </div>
+              </div>
+            </div>
+
+            <!-- Категория -->
+            <div class="col-md-6">
+              <label for="category" class="form-label font-weight-bold">
+                <i class="material-icons align-middle">format_list_bulleted</i> Категория
+              </label>
+              <div class="input-group input-group-static">
+                <span class="input-group-text"></span>
+                <select id="category" name="category" class="form-select" required>
+                  <option value="">—</option>
+                </select>
+                <div class="invalid-feedback">
+                  Пожалуйста, выберите категорию
+                </div>
+              </div>
+            </div>
+
+            <!-- Подкатегория -->
+            <div class="col-md-6">
+              <label for="subcategory" class="form-label font-weight-bold">
+                <i class="material-icons align-middle">subdirectory_arrow_right</i> Подкатегория
+              </label>
+              <div class="input-group input-group-static">
+                <span class="input-group-text"></span>
+                <select id="subcategory" name="subcategory" class="form-select" required>
+                  <option value="">—</option>
+                </select>
+                <div class="invalid-feedback">
+                  Пожалуйста, выберите подкатегорию
+                </div>
+              </div>
+            </div>
+
+            <!-- Комментарий -->
+            <div class="col-12">
+              <label for="comment" class="form-label font-weight-bold">
+                <i class="material-icons align-middle">comment</i> Комментарий
+              </label>
+              <div class="input-group input-group-static">
+                <span class="input-group-text"></span>
+                <textarea
+                  id="comment"
+                  name="comment"
+                  rows="3"
+                  class="form-control"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 text-end">
+            <button type="submit" class="btn bg-gradient-primary">
+               Сохранить
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="{% static 'js/form.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Справочники{% endblock %}
+
+{% block extra_css %}
+<style>
+  .catalog-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 1rem;
+    height: calc(100vh - 100px);
+    padding: 1rem;
+  }
+  .catalog-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .catalog-card .card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1rem;
+    overflow: hidden;
+  }
+  .catalog-table-container {
+    flex: 1;
+    overflow-y: auto;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <div aria-live="polite" aria-atomic="true" class="position-relative">
+    <div id="toast-container" class="position-fixed top-0 end-0 p-3" style="z-index:1055;"></div>
+  </div>
+
+  <div class="catalog-cards-grid">
+    <!-- Статусы -->
+    <div class="card catalog-card shadow-sm">
+      <div class="card-header pb-0"><h6 class="mb-0">Статусы</h6></div>
+      <div class="card-body">
+        <div class="catalog-table-container">
+          <table class="table mb-0" id="status_table">
+            <thead>
+              <tr><th>Название</th><th class="text-end">Действия</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <button class="btn bg-gradient-success btn-add mt-2" data-model="status">Добавить статус</button>
+      </div>
+    </div>
+
+    <!-- Типы -->
+    <div class="card catalog-card shadow-sm">
+      <div class="card-header pb-0"><h6 class="mb-0">Типы</h6></div>
+      <div class="card-body">
+        <div class="catalog-table-container">
+          <table class="table mb-0" id="kind_table">
+            <thead>
+              <tr><th>Название</th><th class="text-end">Действия</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <button class="btn bg-gradient-success btn-add mt-2" data-model="kind">Добавить тип</button>
+      </div>
+    </div>
+
+    <!-- Категории -->
+    <div class="card catalog-card shadow-sm">
+      <div class="card-header pb-0"><h6 class="mb-0">Категории</h6></div>
+      <div class="card-body">
+        <div class="catalog-table-container">
+          <table class="table mb-0" id="category_table">
+            <thead>
+              <tr><th>Название</th><th>Тип</th><th class="text-end">Действия</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <button class="btn bg-gradient-success btn-add mt-2" data-model="category">Добавить категорию</button>
+      </div>
+    </div>
+
+    <!-- Подкатегории -->
+    <div class="card catalog-card shadow-sm">
+      <div class="card-header pb-0"><h6 class="mb-0">Подкатегории</h6></div>
+      <div class="card-body">
+        <div class="catalog-table-container">
+          <table class="table mb-0" id="subcategory_table">
+            <thead>
+              <tr><th>Название</th><th>Категория</th><th class="text-end">Действия</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <button class="btn bg-gradient-success btn-add mt-2" data-model="subcategory">Добавить подкатегорию</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="catalogModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header pb-0">
+          <h5 class="modal-title" id="catalogTitle"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body py-3">
+          <form id="catalogForm">
+            <input name="id" type="hidden">
+            <div class="mb-3">
+              <label class="form-label">Название</label>
+              <input name="name" type="text" class="form-control" required>
+            </div>
+            <div class="mb-3" id="parentTypeField" style="display:none;">
+              <label class="form-label">Тип</label>
+              <select name="type" class="form-select"></select>
+            </div>
+            <div class="mb-3" id="parentCategoryField" style="display:none;">
+              <label class="form-label">Категория</label>
+              <select name="category" class="form-select"></select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer pt-0">
+          <button type="button" class="btn bg-gradient-primary" id="saveCatalogBtn">Сохранить</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+  <script src="{% static 'js/catalog.js' %}" defer></script>
+{% endblock %}
